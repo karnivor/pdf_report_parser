@@ -1,5 +1,5 @@
-# Codes to convert .pfd -report summaries to Excel sheets.
-## Install (Mac)
+# Codes to convert .pdf -report summaries to Excel sheets.
+## Install (for Mac)
 1. Install (latest) Python 3.x with homebrew (http://brew.sh) if not available
 ```console
 brew install python
