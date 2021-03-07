@@ -12,11 +12,11 @@ brew install git
 ```console
 git clone http://github.com/karnivor/pdf_report_parser.git
 ```
-3. Install required tools for to run the code 
+4. Install required tools for to run the code 
 ```console
 pip3 install -r requirements.txt
 ```
-3. Install required tools for to run the code 
+5. Install required tools for to run the code 
 ```console
 python3 run_parser.py '/path/to/raw/pdfs/' '/where/to/write/results_table.xlxs'
 ```
