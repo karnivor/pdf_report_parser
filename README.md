@@ -18,6 +18,6 @@ pip3 install -r requirements.txt
 ```
 5. Install required tools for to run the code 
 ```console
-python3 run_parser.py '/path/to/raw/pdfs/' '/where/to/write/results_table.xlxs'
+python3 run_parser.py /path/to/raw/pdfs/ /where/to/write/results_table.xlsx
 ```
 
