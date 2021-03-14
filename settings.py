@@ -2,7 +2,8 @@
 texts_to_search_pre_comparison = [
     'Left anterior fascicular block',
     'Left ventricular hypertrophy',
-    'Right bundle branch block','Left bundle branch block',
+    'Right bundle branch block',
+    'Left bundle branch block',
     'Abnormal ECG',
     'Septal infarct',
     'Inferior infarct',
