@@ -7,6 +7,8 @@ import zlib
 import pandas as pd
 import numpy as np
 
+import settings # Settings specific to application.
+
 # TODO:
 # -
 
@@ -14,6 +16,11 @@ import numpy as np
 # https://stackoverflow.com/questions/62136323/how-to-convert-pdf-document-to-json-using-python-script
 # https://stackoverflow.com/questions/53608910/decompress-flatedecode-objects-in-pdf-in-python
 
+##############################################################################
+
+def strip_text(sentence):
+
+    return ''.join(sentence.split()).lower()
 
 ##############################################################################
 
@@ -151,10 +158,11 @@ def concat_texts_to_list(df_in, max_n_of_cols):
 
     texts_list = []
 
-    for ind in range(max_n_of_cols):
+    for ind in range(min(max_n_of_cols, len(coord_arr))):
 
         if ind < len(coord_arr):
-            texts_list.append(df_in.loc[(df_in.iloc[: ,0] == coords_col[2]) & (df_in.iloc[:, 1] == coord_arr[ind]), 2].iloc[0])
+            texts_list.append(df_in.loc[(df_in.iloc[:, 0] == coords_col[2]) & (df_in.iloc[:, 1] ==
+                                                                               coord_arr[ind]), 2].iloc[0])
         else:
             texts_list.append('')
 
@@ -166,16 +174,22 @@ def read_decoded_streams(path_reports, out_file_name):
 
     max_n_of_text_cols = 10
 
-    title_row = ['tiedosto', 'nimi', 'hetu', 'aika', 'Ventilation rate', 'PR interval', 'QRS duration', 'QT', 'QTc', 'P', 'R', 'T']
+    title_row = ['tiedosto', 'nimi', 'hetu', 'aika', 'Ventilation rate', 'PR interval', 'QRS duration', 'QT', 'QTc', 'P', 'R', 'T', 'vertailu-EKG aika']
 
-    title_texts = []
+    texts_to_title = []
+    texts_to_title_c = []
 
-    for ind in range(max_n_of_text_cols):
-        title_texts.append('text_%d' % ind)
+    for text in settings.texts_to_search_pre_comparison:
+        texts_to_title.append('%s' % text)
 
-    title_row = title_row + title_texts
+    for text in settings.texts_to_search_post_comparison:  # Do this again for the comparisons.
+        texts_to_title_c.append('%s_v' % text)
+
+    # title_row = title_row + texts_to_title + texts_to_title_c
 
     rows = []
+
+    file_ind = 0
 
     for file_name in os.listdir(path_reports):
         # print(os.path.join(path_reports, file_name))
@@ -216,9 +230,49 @@ def read_decoded_streams(path_reports, out_file_name):
             row.append(fetch_key(df_matches, find_value_coords(df_matches, 'R')))
             row.append(fetch_key(df_matches, find_value_coords(df_matches, 'T')))
             # row.append(concat_texts(df_matches))
-            row = row + concat_texts_to_list(df_matches, max_n_of_text_cols)
+
+            findings_texts = concat_texts_to_list(df_matches, 100)
+
+            comparison_ind = len(findings_texts)
+            comparison_datetime = ''
+
+            for item, ind in zip(findings_texts, range(len(findings_texts))):
+                matches = re.findall('When compared with ECG of (\d{2}-[A-Z]{0,3}-\d{4}\s\d{2}:\d{2})', item)
+
+                if len(matches) > 0:
+                    comparison_datetime = matches[0]
+                    comparison_ind = ind
+
+            row.append(comparison_datetime)
+
+            for item in texts_to_title:
+                tmp = False
+                for findings_item in findings_texts[:comparison_ind]:
+
+                    if strip_text(item) == strip_text(findings_item):
+                        tmp = True
+                        break
+
+                row.append(tmp)
+
+            if file_ind == 0:
+                title_row = title_row + texts_to_title
+
+            for item in texts_to_title_c:
+                tmp = False
+                for findings_item in findings_texts[comparison_ind + 1:]:
+                    if strip_text(item) == strip_text(findings_item):
+                        tmp = True
+                        break
+
+                row.append(tmp)
+
+            if file_ind == 0:
+                title_row = title_row + texts_to_title_c
 
             rows.append(row)
+
+            file_ind = file_ind + 1;
 
     df_out = pd.DataFrame(rows, columns=title_row)
 
