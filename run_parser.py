@@ -219,7 +219,7 @@ def read_decoded_streams(path_reports, out_file_name):
 
             try:
                 col_num = find_header_col(df_matches)
-             except Exception as e:
+            except Exception as e:
                 print('Error in processing %s' % file_name)
                 print(e)
                 continue
