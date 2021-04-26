@@ -96,7 +96,7 @@ def find_header_col(df_in):
 
 ##############################################################################
 
-def dump_decoded_streams(path_reports):
+def dump_decoded_streams(path_reports, path_dump):
 
     for file_name in os.listdir(path_reports):
         # print(os.path.join(path_reports, file_name))
@@ -107,7 +107,8 @@ def dump_decoded_streams(path_reports):
             pdf = open(full_file_name, 'rb').read()
             stream = re.compile(b'.*?FlateDecode.*?stream(.*?)endstream', re.S)
 
-            full_file_name_out = full_file_name[:-4] + '.txt'
+            full_file_name_out = os.path.join(path_dump, file_name)
+            full_file_name_out = full_file_name_out[:-4] + '.txt'
 
             if os.path.exists(full_file_name_out):
                 os.remove(full_file_name_out)
@@ -116,7 +117,7 @@ def dump_decoded_streams(path_reports):
                 s = s.strip(b'\r\n')
                 try:
                     file_h = open(full_file_name_out, 'a')
-                    file_h.write(zlib.decompress(s).decode('UTF-8'))
+                    file_h.write(zlib.decompress(s).decode('latin-1'))
                     file_h.close()
 
                 except Exception as err:
@@ -317,5 +318,7 @@ if __name__ == '__main__':
 
     # parse_report(sys.argv[1], sys.argv[2])
 
-    dump_decoded_streams(sys.argv[1])
-    read_decoded_streams(sys.argv[1], sys.argv[2])
+    output_path = os.path.dirname(os.path.abspath(sys.argv[2]))
+
+    dump_decoded_streams(sys.argv[1], output_path)
+    read_decoded_streams(output_path, sys.argv[2])
