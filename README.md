@@ -20,6 +20,11 @@ pip3 install -r requirements.txt
 ```console
 python3 run_parser.py /path/to/raw/pdfs/ /where/to/write/results_table.xlsx
 ```
+6. If you need to update code
+```console
+git pull
+```
+and repeat 5.
 
 ## Install (for Windows)
 
