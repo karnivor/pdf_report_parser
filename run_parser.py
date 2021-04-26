@@ -213,11 +213,16 @@ def read_decoded_streams(path_reports, out_file_name):
                 df_matches.iloc[:,0] = df_matches.iloc[:,0].astype(int)
                 df_matches.iloc[:,1] = df_matches.iloc[:,1].astype(int)
             except Exception as e:
-                print('Error in processin %s' % file_name)
+                print('Error in processing %s' % file_name)
                 print(e)
                 continue
 
-            col_num = find_header_col(df_matches)
+            try:
+                col_num = find_header_col(df_matches)
+             except Exception as e:
+                print('Error in processing %s' % file_name)
+                print(e)
+                continue
 
             row.append(fetch_key(df_matches, [450, 20030]))
             row.append(fetch_key(df_matches, [7750, 20030])[3:])
