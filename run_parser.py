@@ -215,6 +215,7 @@ def read_decoded_streams(path_reports, out_file_name):
             catch Exception as e:
                 print('Error in processin %s' % file_name)
                 print(e)
+                continue
 
             col_num = find_header_col(df_matches)
 
