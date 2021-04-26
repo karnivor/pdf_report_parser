@@ -212,7 +212,7 @@ def read_decoded_streams(path_reports, out_file_name):
                 df_matches = pd.DataFrame(matches)
                 df_matches.iloc[:,0] = df_matches.iloc[:,0].astype(int)
                 df_matches.iloc[:,1] = df_matches.iloc[:,1].astype(int)
-            catch Exception as e:
+            except Exception as e:
                 print('Error in processin %s' % file_name)
                 print(e)
                 continue
