@@ -208,9 +208,13 @@ def read_decoded_streams(path_reports, out_file_name):
 
             matches = re.findall('BT\s(\d+)\s(\d+)\sTd\s\((.*?)\)\sTj\sET', stream)
 
-            df_matches = pd.DataFrame(matches)
-            df_matches.iloc[:,0] = df_matches.iloc[:,0].astype(int)
-            df_matches.iloc[:,1] = df_matches.iloc[:,1].astype(int)
+            try:
+                df_matches = pd.DataFrame(matches)
+                df_matches.iloc[:,0] = df_matches.iloc[:,0].astype(int)
+                df_matches.iloc[:,1] = df_matches.iloc[:,1].astype(int)
+            catch Exception as e:
+                print('Error in processin %s' % file_name)
+                print(e)
 
             col_num = find_header_col(df_matches)
 
