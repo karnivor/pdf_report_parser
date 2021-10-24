@@ -37,4 +37,4 @@ For installing Python3 (and pip) to Linux you can use follow a tutorial like (ht
 
 ## TODO
 
-Improve the frase recognition part.
+Improve the phrase recognition/comparison part.
