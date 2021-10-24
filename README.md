@@ -34,3 +34,7 @@ For installing Python3 (and pip) to Linux you can use follow a tutorial like (ht
 
 ## Notes
 - The run_parser.py command reads the list of texts in settings.py to search for similar texts in reports. You may edit settings.py for more texts to be searched. It uses two lists. Some reports have mention "When compared with ECG of XX-AAA-XXXX". The first list is used to compare terms pre-mention and the second list post-mention. By default these are the same. The Excel header texts of post-mention are added with "_v" for the Finnish word "vertailu".
+
+## TODO
+
+Improve the frase recognition part.
